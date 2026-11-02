@@ -1,0 +1,329 @@
+:root {
+  --navy: #00357a;
+  --yellow: #ffde59;
+  --light: #f4f6fc;
+  --green: #0b7a2e;
+  --blue: #1a5fb4;
+  --amber: #b86e00;
+  --red: #FF0F0F;
+  --grey: #5f6b7a;
+  --text: #0d1b2a;
+  --muted: #4a5568;
+  --display: 'Barlow Semi Condensed', 'Arial Narrow', Arial, sans-serif;
+  --sans: 'Barlow', 'Segoe UI', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { width: 100%; height: 100%; overflow: hidden; background: #000; }
+
+body { cursor: default; }
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* 16:9 layout; sizes in vh so it scales on any 1080p / 4K screen */
+.screen {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  width: 100vw;
+  height: 100vh;
+    background: linear-gradient(90deg,
+    #0c114f 0%,
+    #0c114f 45%,
+    #070b33 62%,
+    #02041a 78%,
+    #000000 100%);
+  font-family: var(--sans);
+  color: var(--text);
+  animation: fade-in 0.8s ease both;
+}
+
+/* ---------- Left panel ---------- */
+.left {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+.topbar {
+  height: 13.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6vh 0 2.5vh;
+  background: var(--light);
+}
+.logo { height: 40vh; max-width: 100%; object-fit: contain; }
+.clock {
+  font-family: var(--display);
+  font-size: 10.5vh;
+  font-weight: 700;
+  color: var(--clock-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0 5.5vh 0 3.8vh;
+  animation: fade-in 0.8s ease both; /* new flight fades in */
+}
+
+.destination { min-width: 0; }
+.label {
+  font-size: 3vh;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.city {
+  width: 100%;
+  font-family: var(--display);
+  font-size: 15vh;
+  font-weight: 700;
+  line-height: 1.05;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #ffffff;
+}
+.city-code {
+  margin-left: 0.35em;
+  font-size: 0.38em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  text-align: center ;
+}
+.route-extra {
+  margin-top: 0.8vh;
+  font-size: 3.6vh;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cards { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3vh; }
+.card {
+  position: relative;
+  min-width: 0;
+  height: 20vh;
+  padding: 0 2vh 0 5.5vh;
+  background: #ffffff;
+  border-radius: 2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5vh;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3.5vh;
+  background: #ffffff;
+}
+.card-delayed::before { background: var(--amber); }
+.card-label {
+  font-size: 3vh;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #000000;
+}
+.card-value {
+  width: 100%;
+  text-align: center;
+  font-family: var(--display);
+  font-size: 12vh;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+}
+.card-value s { color: var(--muted); text-decoration-thickness: 0.08em; }
+.value-delayed { color: var(--red); }
+.value-ontime { color: var(--green); }
+
+.status {
+  height: 14vh;
+  display: flex;
+  align-items: center;
+  padding: 0 2%;
+  border-radius: 1.8vh;
+  color: #000000;
+}
+.status-text {
+  width: 100%;
+  font-family: var(--green);
+  font-size: 10.5vh;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+}
+.status-open { background: #34bd15; }
+.status-boarding { background: #ffcc00; }
+.status-scheduled { background: #2eab9a; }
+.status-delayed { background: var(--red); animation: blink 1s steps(2, start) infinite; }.status-closed { background: red; }
+.status-final { background: var(--red); animation: blink 1s steps(2, start) infinite; }
+@keyframes blink { to { opacity: 0.55; } }
+
+.message { display: flex; flex-direction: column; gap: 3vh; }
+.message-title { font-family: var(--display); font-size: 12vh; font-weight: 700; }
+.message-detail { font-size: 4.5vh; color: var(--muted); }
+
+/* ---------- Footer ticker ---------- */
+.footer {
+  position: relative;
+  height: 6.3vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--navy);
+  color: #fff;
+  font-size: 3vh;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.ticker {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  animation: ticker 40s linear infinite;
+}
+.ticker-copy { display: flex; }
+.ticker-copy span::after { content: '\2022'; margin: 0 4vh; color: var(--yellow); }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.offline-dot { width: 1.6vh; height: 1.6vh; border-radius: 50%; background: var(--red); }
+.footer .offline-dot {
+  position: absolute;
+  right: 2vh;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 0 0.8vh var(--navy);
+}
+
+/* ---------- Right panel ---------- */
+.right { display: flex; flex-direction: column; background: transparent;
+min-width: 0;
+outline: 0.4vh solid #d8daeb;   /* outline colour */
+  outline-offset: -0.4vh;  }
+
+
+.gate-box {
+  height: 39.5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--yellow);
+  font-family: var(--display);
+  font-weight: 700;
+}
+.gate-label { font-size: 8.5vh; line-height: 1; letter-spacing: 0.12em; }
+.gate-number { font-size: 28vh; line-height: 0.95; font-variant-numeric: tabular-nums; }
+
+.gate-image {
+  flex: 1;
+  background-color: var(--navy);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+/* A city icon (transparent .png) is shown whole, with space around it */
+
+
+/* ---------- Advert video (time between flights) ---------- */
+/* Full-screen video, with a strip underneath: gate number | next flight | clock */
+.ad-screen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  font-family: var(--sans);
+  animation: fade-in 0.8s ease both;
+}
+.ad-stage { flex: 1; min-height: 0; background: #000; }
+.ad-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fills the full width; a little of the top and bottom is cut off */
+  object-position: center;
+  display: block;
+}
+
+.ad-strip {
+  height: 15vh;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  background: var(--navy);
+  color: #fff;
+  border-top: 0.6vh solid var(--yellow);
+  
+}
+.ad-strip-gate {
+  display: flex;
+  font-size: 2.6vh;
+  align-items: center;
+  gap: 2vh;
+  font-style: bold;
+  padding: 0 5vh;
+  background: #000000;
+  color: #ffffff;
+
+  font-family: var(--display);
+  font-weight: 700;
+}
+.ad-strip-gate-label { font-size: 5vh; letter-spacing: 0.12em; }
+.ad-strip-gate-number { font-size: 14vh; line-height: 1; font-variant-numeric: tabular-nums; }
+
+.ad-strip-next-value
+ {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vh;
+  text-align: center;
+  align-items: center;
+  font-weight: 700;
+  transform: translateY(3vh);
+}
+.ad-strip-label {
+  font-size: 2.6vh;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #a9bcd6;
+  transform: translateY(3vh);
+  text-align: center;
+  
+}
+.ad-strip-next-value {
+  width: 100%;
+  font-family: var(--display);
+  font-size: 6.5vh;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: pre;
+  overflow: hidden;
+}
+
+.ad-strip-clock {
+  display: flex;
+  align-items: center;
+  gap: 2vh;
+  padding: 0 5vh;
+  background: #000000;
+}
+.ad-strip-clock .clock { color: #ffffff
+  ; font-size: 13vh; }
